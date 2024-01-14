@@ -8,11 +8,11 @@
   #define SERIAL_UDRE   USART_UDRE_vect
 
   // Define step pulse output pins. NOTE: All step bit pins must be on the same port.
-  #define STEPPER_PORT    DDRB
-  #define STEPPER_CONTROL PORTB
-  #define X_STEP          2  // Uno Digital Pin 2
-  #define X_DIR           3  // Uno Digital Pin 3
-  #define STEPPER_MASK       ((1<<X_STEP) | (1<<X_DIR)) // All step bits
+  #define STEPPER_PORT    DDRD
+  #define STEPPER_CONTROL PORTD
+  #define X_STEP          ( 1 << 2 )  // Uno Digital Pin 2
+  #define X_DIR           ( 1 << 3 )  // Uno Digital Pin 3
+  #define STEPPER_MASK    ( 1 << 2 ) | ( 1 << 3 ) // All step bits
 
   // Define stepper driver enable/disable output pin.
 /*  #define ENABLE_PORT     DDRB

@@ -4,6 +4,8 @@ float p_list[FILTER_SIZE] = { 0 };
 float pos = 0;
 int v_index = 0;
 int v_index_0 = 0;
+float pi = 3.141592;
+
 
 float dt = 0.010;
 float K = 1.0 / (FILTER_SIZE - 1);
@@ -19,16 +21,16 @@ void init_system_timer()
 {
 	// 16 bits timers counter 1,2 on uno
 
-	//TIMER 1 for speed update
+	//TIMER 1 for step generation 
 	TCCR1A  = 0;
 	TCCR1B  = 0;
-	TCCR1B |= (1 << CS11); 		// 8 prescaler   -> 2 MHz     -> 1 tick = 0.5 us
+	TCCR1B |= (1 << CS10); 		// 1 prescaler   -> 16 MHz    
 	//TIMSK1 |= (1 << OCIE1A);
 
 	//TIMER 4 for step x generation
 	TCCR2A  = 0;
 	TCCR2B  = 0;
-	TCCR2B |=  (1 << CS20); 		// 1 prescaler   -> 16 MHz
+	TCCR2B |= (1 << CS22) | ( 1 << CS20); 		// 1024 prescaler 
 	//TIMSK2 |=  (1 << OCIE2A);
 	//TIMSK2 |=  (1 << OCIE2B);
 
@@ -54,11 +56,11 @@ void disable_system_timer()
 void enable_system_timer()
 {
 	TIMSK1 |= (1<<OCIE1A);
+	TIMSK1 |= (1<<OCIE1B);
 	TIMSK2 |= (1<<OCIE2A);
-	TIMSK2 |= (1<<OCIE2B);
 }
 
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER2_COMPA_vect)
 {
 	// Serial.print("mode : ");
 	// Serial.println(sys.mode);
@@ -123,34 +125,29 @@ ISR(TIMER1_COMPA_vect)
 
 	stepper.speed = 4 * (lpos - stepper.pos);
 
-	stepper.n_tick = 160000L * PI / (stepper.nb_step * stepper.step * abs(stepper.speed));
+	stepper.n_tick = 160000L * pi / (stepper.nb_step * stepper.step * abs(stepper.speed));
+	stepper.n_tick = max(stepper.n_tick, 450);
+	stepper.n_tick = min(stepper.n_tick, 65000);
 
 	v_index += 1;
 	v_index  = v_index % FILTER_SIZE;
 
-	OCR1A = TCNT1 + 20000; // 100Hz
+	OCR2A = TCNT2 + 157; // 100Hz
 }
 
-ISR(TIMER1_COMPB_vect)
-{
-
-}
-
-
-ISR(TIMER2_COMPA_vect)
+ISR(TIMER1_COMPA_vect)
 {
 	// stepper.n_tick = 30000;
-	uint16_t ntA = max(stepper.n_tick, 4500);
+	uint16_t ntA = max(stepper.n_tick, 450);
 	ntA = min(ntA, 65000);
-	ntA = 65000;
-	OCR2A = TCNT2 + 65000;//ntA;//TCNT5 + ntA;
+	OCR1A = TCNT1 + ntA;//TCNT5 + ntA;
 
 	uint16_t ntB = ntA >> 1;
-	OCR2B = TCNT2 + ntB;
+	OCR1B = TCNT1 + ntB;
 
-	/*if(abs(stepper.speed) > 0.5)
+	if(abs(stepper.speed) > 0.5)
 	{
-		STEPPER_CONTROL |= X_STEP;
+		STEPPER_CONTROL &= ~X_STEP;
 		
 		if(stepper.speed > 0)
 		{
@@ -163,13 +160,9 @@ ISR(TIMER2_COMPA_vect)
 			STEPPER_CONTROL &= ~X_DIR;
 		}
 	}
-	else
-	{
-		// digitalWrite(OUT_AXE_Z_DIR, LOW);
-	}	*/
 }
 
-ISR(TIMER2_COMPB_vect)
+ISR(TIMER1_COMPB_vect)
 {
-	STEPPER_CONTROL &= ~X_STEP;
+	STEPPER_CONTROL |= X_STEP;
 }

@@ -32,8 +32,6 @@ typedef struct {
 	float target_speed;
 	float target_pos;
 
-	float max_pos;
-	float min_pos;
 	int nb_step;
 	int step;
 

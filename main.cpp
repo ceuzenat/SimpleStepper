@@ -51,6 +51,8 @@ void processIncomingChar(char c, char *line, uint8_t &counter)
     if(line[0] == '?')
     {
         Serial.println(lpos);
+        Serial.println(stepper.pos);
+        Serial.println(stepper.speed);
     }
     counter = 0;
     resetLine();
@@ -65,16 +67,25 @@ void processIncomingChar(char c, char *line, uint8_t &counter)
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("Hello there general Kenobi");
+    Serial.begin(115200);
+    Serial.println("Hello there general Kenobi");
 
-  init_system_control_pins();
-  init_system_timer();
-  enable_system_timer();
+    stepper.speed = 0;
+    stepper.pos = 0;
+    stepper.target_speed = 0;
+    stepper.target_pos = 0;
 
-  stepper.speed = 0;
-  stepper.n_tick = 160000;
+    stepper.nb_step = 16;
+    stepper.step = 2;
 
+    stepper.n_tick = 16000;
+
+
+    init_system_control_pins();
+    init_system_timer();
+    enable_system_timer();
+
+    
 }
 
 void loop() 
