@@ -21,12 +21,12 @@
 #define CMD_FEED_HOLD '!'
 
 //Define axis settings
-#define NB_STEP 			1600
-#define MAX_POS 			250
+#define NB_STEP 			800
+#define MAX_POS 			1000
 #define MIN_POS				0
 #define MAX_SPEED			500
-#define FILTER_SIZE			50
+#define FILTER_SIZE			250
 
-#define MM_PER_STEP 		0.01
+#define MM_PER_STEP 		0.02
 
 #endif

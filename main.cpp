@@ -75,7 +75,7 @@ void setup()
     stepper.target_speed = 0;
     stepper.target_pos = 0;
 
-    stepper.nb_step = 16;
+    stepper.nb_step = 8;
     stepper.step = 2;
 
     stepper.n_tick = 16000;

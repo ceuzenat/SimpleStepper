@@ -123,10 +123,10 @@ ISR(TIMER2_COMPA_vect)
 	lpos += K * pos;
 	lpos -= K * p_list[v_index_0];
 
-	stepper.speed = 4 * (lpos - stepper.pos);
+	stepper.speed = 10 * (lpos - stepper.pos);
 
 	stepper.n_tick = 160000L * pi / (stepper.nb_step * stepper.step * abs(stepper.speed));
-	stepper.n_tick = max(stepper.n_tick, 450);
+	stepper.n_tick = max(stepper.n_tick, 350);
 	stepper.n_tick = min(stepper.n_tick, 65000);
 
 	v_index += 1;
@@ -138,7 +138,7 @@ ISR(TIMER2_COMPA_vect)
 ISR(TIMER1_COMPA_vect)
 {
 	// stepper.n_tick = 30000;
-	uint16_t ntA = max(stepper.n_tick, 450);
+	uint16_t ntA = max(stepper.n_tick, 350);
 	ntA = min(ntA, 65000);
 	OCR1A = TCNT1 + ntA;//TCNT5 + ntA;
 
