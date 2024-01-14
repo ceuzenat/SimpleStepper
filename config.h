@@ -2,6 +2,8 @@
 #define config_h
 #include "stepam.h" // For Arduino IDE compatibility.
 
+#define PI 3.141592
+
 // Define CPU pin map and default settings.
 #define CPU_MAP_ATMEGA328P // Arduino Uno CPU
 #define MAX_INT_DIGITS 8
@@ -17,5 +19,14 @@
 #define CMD_STATUS_REPORT '?'
 #define CMD_CYCLE_START '~'
 #define CMD_FEED_HOLD '!'
+
+//Define axis settings
+#define NB_STEP 			1600
+#define MAX_POS 			250
+#define MIN_POS				0
+#define MAX_SPEED			500
+#define FILTER_SIZE			50
+
+#define MM_PER_STEP 		0.01
 
 #endif

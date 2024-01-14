@@ -24,5 +24,6 @@
 #include "config.h"
 #include "cpu_map.h"
 #include "serial.h"
+#include "system.h"
 
 #endif
