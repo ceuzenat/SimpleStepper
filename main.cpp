@@ -68,7 +68,7 @@ void processIncomingChar(char c, char *line, uint8_t &counter)
 void setup()
 {
     Serial.begin(115200);
-    Serial.println("Hello there general Kenobi");
+    Serial.println("Hello there");
 
     stepper.speed = 0;
     stepper.pos = 0;
